@@ -53,7 +53,7 @@ const MapComponent = () => {
         color: "red",
         fillColor: "#f03",
         fillOpacity: 0.5,
-        radius: 10,
+        radius: 40,
       })
         .addTo(industrieCluster)
         .on("click", () => alert("Industrie proche de cette zone."));
@@ -64,7 +64,7 @@ const MapComponent = () => {
         color: "blue",
         fillColor: "#03f",
         fillOpacity: 0.5,
-        radius: 10,
+        radius: 40,
       })
         .addTo(tertiaireCluster)
         .on("click", () => alert("Tertiaire proche de cette zone."));
