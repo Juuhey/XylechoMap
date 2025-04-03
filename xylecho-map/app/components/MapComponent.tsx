@@ -104,6 +104,7 @@ const MapComponent = () => {
     ).addTo(map);
   })
   return <div id="map" style={{ height: "100vh", width: "100%" }} />;
-  ;}
+  ;
+}
 
 export default MapComponent;
