@@ -1,31 +1,32 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster";
-
-const industriePoints: [number, number][] = [
-  [43.1837757, 3.0041906],
-  [43.3426562, 3.2131307],
-  [43.6112422, 3.8767337],
-  [43.6263176, 3.4302412],
-];
-
-const tertiairePoints: [number, number][] = [
-  [43.6044622, 1.4442469],
-  [43.232858, 0.0781021],
-  [42.6985304, 2.8953121],
-  [44.1253665, 4.0852818],
-];
+import { getWebflowProjects } from "app/lib/webflowProjects"; // Import de la fonction
 
 const MapComponent = () => {
   const mapRef = useRef<L.Map | null>(null);
+  const [projects, setProjects] = useState<any[]>([]); // Initialisation avec un tableau vide
 
   useEffect(() => {
-    if (typeof window === "undefined" || mapRef.current) return;
+    const fetchData = async () => {
+      try {
+        const data = await getWebflowProjects();
+        setProjects(data ?? []); // Assurer que `data` est toujours un tableau
+      } catch (error) {
+        console.error("Erreur lors de la récupération des projets :", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (!projects.length || mapRef.current) return; // Ne pas recréer la carte si elle existe
 
     const map = L.map("map").setView([43.183331, 3], 10);
     mapRef.current = map;
@@ -45,39 +46,32 @@ const MapComponent = () => {
       attribution: "&copy; Carto",
     });
 
-    const industrieCluster = L.markerClusterGroup();
-    const tertiaireCluster = L.markerClusterGroup();
+    const markers = L.markerClusterGroup();
 
-    industriePoints.forEach((pos) => {
-      L.circleMarker(pos, {
-        color: "red",
-        fillColor: "#f03",
-        fillOpacity: 0.5,
-        radius: 40,
-      })
-        .addTo(industrieCluster)
-        .on("click", () => alert("Industrie proche de cette zone."));
+    projects.forEach((project) => {
+      const lat = parseFloat(project.latitude);
+      const lon = parseFloat(project.longitude);
+
+      if (!isNaN(lat) && !isNaN(lon)) {
+        L.circleMarker([lat, lon], {
+          color: "purple",
+          fillColor: "#800080",
+          fillOpacity: 0.6,
+          radius: 40,
+        })
+          .addTo(markers)
+          .bindPopup(`<b>${project.name}</b><br>${project.ville}`)
+          .on("click", () => console.log(`Projet sélectionné : ${project.name}`));
+      }
     });
 
-    tertiairePoints.forEach((pos) => {
-      L.circleMarker(pos, {
-        color: "blue",
-        fillColor: "#03f",
-        fillOpacity: 0.5,
-        radius: 40,
-      })
-        .addTo(tertiaireCluster)
-        .on("click", () => alert("Tertiaire proche de cette zone."));
-    });
-
-    map.addLayer(industrieCluster);
-    map.addLayer(tertiaireCluster);
+    map.addLayer(markers);
 
     L.control.layers(
       { Street, Esri, Dark },
-      { Industrie: industrieCluster, Tertiaire: tertiaireCluster }
+      { Projets: markers }
     ).addTo(map);
-  }, []);
+  }, [projects]); // Exécuter ce useEffect quand projects est mis à jour
 
   return <div id="map" style={{ height: "100vh", width: "100%" }} />;
 };
