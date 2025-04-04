@@ -66,8 +66,8 @@ export default function MapComponent({ projects }: MapComponentProps) {
 
       if (!isNaN(lat) && !isNaN(lon)) {
         L.circleMarker([lat, lon], {
-          color: "blue",
-          fillColor: "blue",
+          color: "gray",
+          fillColor: "gray",
           fillOpacity: 0.5,
           radius: 20,
         })
