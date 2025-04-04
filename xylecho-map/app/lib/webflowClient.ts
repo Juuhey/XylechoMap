@@ -1,6 +1,6 @@
 import { WebflowClient } from "webflow-api";
 
-const token = process.env.WEBFLOW_CMS_TOKEN;
+const token = `${process.env.WEBFLOW_CMS_TOKEN}`;
 
 if (!token) {
   throw new Error("❌ WEBFLOW_CMS_TOKEN is missing in .env");

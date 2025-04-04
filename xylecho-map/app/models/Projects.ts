@@ -2,8 +2,7 @@ import { WebflowProject } from "@/types/w_projects";
 
 export class Project {
     id?: string;
-    lastPublished?: string;
-    lastUpdated?: string;
+    year?: string;
     name?: string;
     object?: string;
     ville?: string;
@@ -12,8 +11,7 @@ export class Project {
 
     constructor(item: WebflowProject) {
         this.id = item.id;
-        this.lastPublished = item.lastPublished;
-        this.lastUpdated = item.lastUpdated;
+        this.year = item.fieldData?.year;
         this.name = item.fieldData?.name;
         this.object = item.fieldData?.object;
         this.ville = item.fieldData?.ville;

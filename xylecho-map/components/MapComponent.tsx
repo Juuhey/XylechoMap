@@ -1,32 +1,22 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster";
-import { getWebflowProjects } from "app/lib/webflowProjects"; // Import de la fonction
+import { Project } from "@/app/models/Projects";
 
-const MapComponent = () => {
+interface MapComponentProps {
+  projects: Project[] | null;
+}
+
+export default function MapComponent({ projects }: MapComponentProps) {
   const mapRef = useRef<L.Map | null>(null);
-  const [projects, setProjects] = useState<any[]>([]); // Initialisation avec un tableau vide
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getWebflowProjects();
-        setProjects(data ?? []); // Assurer que `data` est toujours un tableau
-      } catch (error) {
-        console.error("Erreur lors de la récupération des projets :", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    if (!projects.length || mapRef.current) return; // Ne pas recréer la carte si elle existe
+    if (!projects || !projects.length || mapRef.current) return;
 
     const map = L.map("map").setView([43.183331, 3], 10);
     mapRef.current = map;
@@ -49,8 +39,8 @@ const MapComponent = () => {
     const markers = L.markerClusterGroup();
 
     projects.forEach((project) => {
-      const lat = parseFloat(project.latitude);
-      const lon = parseFloat(project.longitude);
+      const lat = parseFloat(project.latitude || "");
+      const lon = parseFloat(project.longitude || "");
 
       if (!isNaN(lat) && !isNaN(lon)) {
         L.circleMarker([lat, lon], {
@@ -71,9 +61,7 @@ const MapComponent = () => {
       { Street, Esri, Dark },
       { Projets: markers }
     ).addTo(map);
-  }, [projects]); // Exécuter ce useEffect quand projects est mis à jour
+  }, [projects]);
 
   return <div id="map" style={{ height: "100vh", width: "100%" }} />;
-};
-
-export default MapComponent;
+}
