@@ -1,12 +1,11 @@
-"use client"
-import dynamic from "next/dynamic";
+// app/page.tsx
+import { getWebflowProjects } from "./lib/webflowProjects";
+import { plainifyProjects } from "./utils/plainifyProjects";
+import MapWrapper from "./components/mapWrapper";
 
-const MapComponent = dynamic(() => import("@/components/MapComponent"), { ssr: false });
+export default async function MapPage() {
+  const projects = await getWebflowProjects();
+  const plainProjects = projects ? plainifyProjects(projects) : [];
 
-export default function Home() {
-  return (
-    <div>
-      <h1>Carte interactive</h1>
-      <MapComponent />
-    </div>
-)}
+  return <MapWrapper projects={plainProjects} />;
+}
