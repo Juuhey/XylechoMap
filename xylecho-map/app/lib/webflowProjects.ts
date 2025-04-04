@@ -28,7 +28,7 @@ export async function getWebflowProjects() {
       } catch {
         return null;
 
-    }} catch (error) {
+    }} catch {
     return null;
   }
 }

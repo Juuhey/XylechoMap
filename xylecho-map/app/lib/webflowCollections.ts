@@ -11,7 +11,7 @@ export async function getWebflowCollections(): Promise<WebflowCollection[] | nul
     const collections = collectionsData.collections as WebflowCollection[];
     
     return collections;
-  } catch (error) {
+  } catch {
     return null;
   }
 }
