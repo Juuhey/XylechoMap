@@ -1,11 +1,13 @@
 "use client";
 import { useEffect, useRef } from "react";
-import L from "leaflet";
+import { Project } from "@/app/models/Projects";
+import * as L from "leaflet";
+import GestureHandling from "leaflet-gesture-handling"
 import "leaflet/dist/leaflet.css";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster";
-import { Project } from "@/app/models/Projects";
+import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 
 interface MapComponentProps {
   projects: Project[] | null;
@@ -17,22 +19,33 @@ export default function MapComponent({ projects }: MapComponentProps) {
   useEffect(() => {
     //
     if (projects && projects.length && !mapRef.current) {
+      
+      // gestureHandling
+      L.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
+
       const map = L.map("map").setView([43.183331, 3], 10);
+      (map as any).gestureHandling.enable();
       mapRef.current = map;
 
       const Street = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 11,
+        maxZoom: 15,
         attribution: "&copy; OpenStreetMap contributors",
       }).addTo(map);
 
-      const Esri = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
-        maxZoom: 11,
+      const Satellite = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
+        maxZoom: 15,
         attribution: "&copy; Esri, Maxar, Earthstar Geographics",
       });
 
-      const Dark = L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
-        maxZoom: 11,
+      const Sombre = L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+        maxZoom: 15,
         attribution: "&copy; Carto",
+      });
+
+      map.on("zoomstart", (e) => {
+        if ("originalEvent" in e && ((e.originalEvent as MouseEvent).ctrlKey || (e.originalEvent as MouseEvent).metaKey)) {
+          (e.originalEvent as MouseEvent).preventDefault(); // Annuler le zoom
+        }
       });
 
       // Fonction pour déterminer la couleur d'un cluster en fonction du nombre d'éléments
@@ -123,7 +136,7 @@ export default function MapComponent({ projects }: MapComponentProps) {
       map.addLayer(markers);
 
       L.control.layers(
-        { Street, Esri, Dark },
+        { Street, Satellite, Sombre },
         { Projets: markers }
       ).addTo(map);
     }
