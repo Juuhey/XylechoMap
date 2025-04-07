@@ -18,10 +18,6 @@ export async function getWebflowProjects() {
         );
 
         const projects: Project[] = projectsList.items?.map((item: WebflowProject) => new Project(item)) || [];
-
-        // projectsList.items?.forEach((item) => {
-        //     console.log(item.fieldData.name);
-        // });
         
         return projects;
 
