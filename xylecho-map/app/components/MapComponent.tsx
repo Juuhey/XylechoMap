@@ -37,22 +37,48 @@ export default function MapComponent({ projects }: MapComponentProps) {
 
       // Fonction pour déterminer la couleur d'un cluster en fonction du nombre d'éléments
       const getClusterColor = (count: number) => {
-        if (count <= 5) return "#e8e226";  // 0-5 projets
-        if (count <= 10) return "orange";   // 6-10 projets
-        if (count <= 15) return "red";   // 11-15 projets
-        return "purple";                // +20 projets
+        if (count <= 5) return {fill: "#F5EC7B", border: "#FAF6C0"};  // 0-5 projets
+        if (count <= 10) return {fill: "#EBE457", border: "#F5EC7B"};   // 6-10 projets
+        if (count <= 15) return {fill: "#E2C94D", border: "#EBE457"};  // 11-15 projets
+        return {fill: "#E2B013", border: "#E2C94D"};                // +20 projets
       };
 
       // Création du groupe de clusters
       const markers = L.markerClusterGroup({
+
+        // Options de clusterisation
+        maxClusterRadius: (zoom) => {
+          // Retourne une valeur plus petite pour les zooms plus élevés
+          return zoom > 10 ? 20 : zoom > 15 ? 20 : zoom > 20 ? 25 : 25;
+        },
+
         // Définition de la fonction pour créer l'icône du cluster
         iconCreateFunction: (cluster) => {
           const markersCount = cluster.getChildCount();
-          const radius = 20 + markersCount / 2; // Calcul du rayon en fonction du nombre de projets
-          const color = getClusterColor(markersCount); // Détermination de la couleur du cluster
-          
+          const radius = 17 + markersCount / 2;
+
+          const color = getClusterColor(markersCount).border;
+          //console.log(color);
+          const fillColor = getClusterColor(markersCount).fill;
+          //console.log(fillColor);
+
           return new L.DivIcon({
-            html: `<div style="background-color: ${color}; width: ${radius * 2}px; height: ${radius * 2}px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold;">${markersCount}</div>`,
+            html: `<div style="
+            background-color: ${color};
+            border-color: ${fillColor};
+            width: ${radius * 2}px;
+            height: ${radius * 2}px;
+            border-radius: 50%;
+            border-width: 3px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: black;
+            font-weight: bold;
+            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.15);
+            ">
+              ${markersCount}
+            </div>`,
             className: "leaflet-markercluster",
             iconSize: new L.Point(radius * 2, radius * 2),
           });
@@ -62,14 +88,32 @@ export default function MapComponent({ projects }: MapComponentProps) {
       projects.forEach((project) => {
         const lat = parseFloat(project.latitude || "");
         const lng = parseFloat(project.longitude || "");
-        
+      
         if (!isNaN(lat) && !isNaN(lng)) {
-          L.circleMarker([lat, lng], {
-            color: "gray",
-            fillColor: "gray",
-            fillOpacity: 0.5,
-            radius: 20,
-          })
+          const radius = 17;
+          const customIcon = new L.DivIcon({
+            html: `<div style="
+            background-color: white;
+            border-color: #FAF6C0;
+            width: ${radius * 2}px;
+            height: ${radius * 2}px;
+            border-radius: 50%;
+            border-width: 3px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: black;
+            font-weight: bold;
+            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.25);
+            ">
+              1
+            </div>`,
+            className: "",
+            iconSize: new L.Point(radius * 2, radius * 2),
+          });
+      
+          // Ajouter le marqueur avec l'icône personnalisée
+          L.marker([lat, lng], { icon: customIcon })
             .addTo(markers)
             .bindPopup(`<b>${project.name}</b><br>${project.ville}`)
             .on("click", () => console.log(`Projet sélectionné : ${project.name}`));
