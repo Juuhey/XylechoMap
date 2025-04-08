@@ -13,6 +13,7 @@ import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster";
 
+import {isMobile} from "react-device-detect";
 
 interface MapComponentProps {
   projects: Project[] | null;
@@ -42,9 +43,8 @@ export default function MapComponent({ projects }: MapComponentProps) {
       };
       
       const map = L.map("map", mapOptions);
-
       mapRef.current = map;
-
+      
       const Street = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         maxZoom: 15,
         attribution: "&copy; OpenStreetMap contributors",
@@ -162,5 +162,30 @@ export default function MapComponent({ projects }: MapComponentProps) {
     };
   }, [projects]);
 
-  return <div id="map" style={{ height: "100vh", width: "100%" }} />;
+  // Message d'instructions pour les gestes
+  const gestureMsg = isMobile 
+    ? "Utilisez deux doigts pour déplacer la carte" 
+    : "Cliquez et utilisez Ctrl / ⌘ + molette pour zoomer sur la carte";
+
+  return (
+    <div className="map-container" style={{ position: "relative", height: "100vh", width: "100%" }}>
+      <div id="map" style={{ height: "100%", width: "100%" }} />
+      <div 
+        className="gesture-message"
+        style={{
+          position: "absolute",
+          bottom: "20px",
+          left: "20px",
+          backgroundColor: "rgba(0, 0, 0, 0.8)",
+          padding: "8px 12px",
+          borderRadius: "5px",
+          fontSize: "14px",
+          zIndex: 1000,
+          pointerEvents: "none" // Permet aux clics de passer à travers vers la carte
+        }}
+      >
+        {gestureMsg}
+      </div>
+    </div>
+  );
 }
