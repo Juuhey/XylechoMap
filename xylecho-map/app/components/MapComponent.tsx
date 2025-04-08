@@ -1,13 +1,18 @@
 "use client";
 import { useEffect, useRef } from "react";
 import { Project } from "@/app/models/Projects";
+
 import * as L from "leaflet";
-import GestureHandling from "leaflet-gesture-handling"
 import "leaflet/dist/leaflet.css";
+
+import "leaflet-gesture-handling";
+import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
+import GestureHandling from "leaflet-gesture-handling";
+
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster";
-import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
+
 
 interface MapComponentProps {
   projects: Project[] | null;
@@ -53,12 +58,6 @@ export default function MapComponent({ projects }: MapComponentProps) {
       const Sombre = L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
         maxZoom: 15,
         attribution: "&copy; Carto",
-      });
-
-      map.on("zoomstart", (e) => {
-        if ("originalEvent" in e && ((e.originalEvent as MouseEvent).ctrlKey || (e.originalEvent as MouseEvent).metaKey)) {
-          (e.originalEvent as MouseEvent).preventDefault(); // Annuler le zoom
-        }
       });
 
       // Fonction pour déterminer la couleur d'un cluster en fonction du nombre d'éléments
@@ -142,7 +141,7 @@ export default function MapComponent({ projects }: MapComponentProps) {
           L.marker([lat, lng], { icon: customIcon })
             .addTo(markers)
             .bindPopup(`<b>${project.name}</b><br>${project.ville}`)
-            .on("click", () => console.log(`Projet sélectionné : ${project.name}`));
+            //.on("click", () => console.log(`Projet sélectionné : ${project.name}`));
         }
       });
 
