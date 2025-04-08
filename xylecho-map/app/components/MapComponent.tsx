@@ -23,8 +23,21 @@ export default function MapComponent({ projects }: MapComponentProps) {
       // gestureHandling
       L.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
 
-      const map = L.map("map").setView([43.183331, 3], 10);
-      (map as any).gestureHandling.enable();
+      const mapOptions: L.MapOptions = {
+        center: [43.183331, 3],
+        zoom: 10,
+        gestureHandling: true,
+        gestureHandlingOptions: {
+          text: {
+            touch: "Utilisez deux doigts pour déplacer la carte",
+            scroll: "Utilisez Ctrl + molette pour zoomer sur la carte",
+            scrollMac: "Utilisez ⌘ + molette pour zoomer sur la carte",
+          },
+        },
+      };
+      
+      const map = L.map("map", mapOptions);
+
       mapRef.current = map;
 
       const Street = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
