@@ -83,9 +83,7 @@ export default function MapComponent({ projects }: MapComponentProps) {
           const radius = 17 + markersCount / 2;
 
           const color = getClusterColor(markersCount).border;
-          //console.log(color);
           const fillColor = getClusterColor(markersCount).fill;
-          //console.log(fillColor);
 
           return new L.DivIcon({
             html: `<div style="
@@ -140,8 +138,13 @@ export default function MapComponent({ projects }: MapComponentProps) {
           // Ajouter le marqueur avec l'icône personnalisée
           L.marker([lat, lng], { icon: customIcon })
             .addTo(markers)
-            .bindPopup(`<b>${project.name}</b><br>${project.ville}, ${project.year}`)
-            //.on("click", () => console.log(`Projet sélectionné : ${project.name}`));
+            .bindPopup(`
+              <b>${project.name}</b>
+              <br>
+              ${project.ville}, ${project.year}
+              <br>
+              ${project.object}
+            `)
         }
       });
 
@@ -182,7 +185,7 @@ export default function MapComponent({ projects }: MapComponentProps) {
             borderRadius: "5px",
             fontSize: "14px",
             zIndex: 1000,
-            pointerEvents: "none" // Permet aux clics de passer à travers vers la carte
+            pointerEvents: "none" // clic through
           }}
         >
           {gestureMsg}
