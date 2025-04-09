@@ -140,7 +140,7 @@ export default function MapComponent({ projects }: MapComponentProps) {
           // Ajouter le marqueur avec l'icône personnalisée
           L.marker([lat, lng], { icon: customIcon })
             .addTo(markers)
-            .bindPopup(`<b>${project.name}</b><br>${project.ville}`)
+            .bindPopup(`<b>${project.name}</b><br>${project.ville}, ${project.year}`)
             //.on("click", () => console.log(`Projet sélectionné : ${project.name}`));
         }
       });
