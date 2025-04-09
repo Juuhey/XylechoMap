@@ -170,22 +170,24 @@ export default function MapComponent({ projects }: MapComponentProps) {
   return (
     <div className="map-container" style={{ position: "relative", height: "100vh", width: "100%" }}>
       <div id="map" style={{ height: "100%", width: "100%" }} />
-      <div 
-        className="gesture-message"
-        style={{
-          position: "absolute",
-          bottom: "20px",
-          left: "20px",
-          backgroundColor: "rgba(0, 0, 0, 0.8)",
-          padding: "8px 12px",
-          borderRadius: "5px",
-          fontSize: "14px",
-          zIndex: 1000,
-          pointerEvents: "none" // Permet aux clics de passer à travers vers la carte
-        }}
-      >
-        {gestureMsg}
-      </div>
+      {!isMobile && (
+        <div
+          className="gesture-message"
+          style={{
+            position: "absolute",
+            bottom: "20px",
+            left: "20px",
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
+            padding: "8px 12px",
+            borderRadius: "5px",
+            fontSize: "14px",
+            zIndex: 1000,
+            pointerEvents: "none" // Permet aux clics de passer à travers vers la carte
+          }}
+        >
+          {gestureMsg}
+        </div>
+      )}
     </div>
   );
 }
