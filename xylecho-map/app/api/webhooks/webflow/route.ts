@@ -4,7 +4,6 @@ import { myWebflowClient } from '@/app/lib/webflowClient';
 import { revalidatePath } from 'next/cache';
 
 const WEBHOOK_SECRET = process.env.WEBFLOW_WEBHOOK_SECRET as string;
-//const WEBHOOK_SECRET = "secret";
 
 export async function POST(request: Request) {
   try {
@@ -24,13 +23,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Signature invalide' }, { status: 401 });
     }
 
-    // Traiter le webhook
-    console.log('Webhook reçu et validé :', body);
+    //console.log('Webhook reçu et validé :', stringBody);
     
-    // Ici, vous pouvez ajouter votre logique pour mettre à jour les données
-    // Par exemple, déclencher une revalidation des données, etc.
-    
-    // Si vous utilisez Next.js revalidation:
     revalidatePath('/', 'layout');
     
     return NextResponse.json({ success: true }, { status: 200 });
