@@ -22,8 +22,6 @@ export async function POST(request: Request) {
       console.error('Signature de webhook invalide');
       return NextResponse.json({ error: 'Signature invalide' }, { status: 401 });
     }
-
-    //console.log('Webhook reçu et validé :', stringBody);
     
     revalidatePath('/', 'layout');
     
