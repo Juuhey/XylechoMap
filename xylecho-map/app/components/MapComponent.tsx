@@ -178,6 +178,7 @@ export default function MapComponent({ projects }: MapComponentProps) {
           className="gesture-message"
           style={{
             position: "absolute",
+            color: "white",
             bottom: "20px",
             left: "20px",
             backgroundColor: "rgba(0, 0, 0, 0.8)",
