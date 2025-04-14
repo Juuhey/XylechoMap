@@ -7,4 +7,4 @@ if (!token) {
 }
 
 export const myWebflowClient = new WebflowClient({ accessToken: token });
-export const sideId = `${process.env.WEBFLOW_SITE_ID}`;
+export const siteId = `${process.env.WEBFLOW_SITE_ID}`;

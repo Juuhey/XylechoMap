@@ -1,11 +1,11 @@
-import { myWebflowClient, sideId } from "./webflowClient";
+import { myWebflowClient, siteId } from "./webflowClient";
 import { getWebflowCollections } from "./webflowCollections";
 import { Project } from "../models/Projects";
 import { WebflowProject } from "@/types/w_projects";
 
 export async function getWebflowProjects() {
   try {
-    if (!myWebflowClient || !sideId) {
+    if (!myWebflowClient || !siteId) {
       return null;
       }
         
