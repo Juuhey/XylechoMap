@@ -168,7 +168,7 @@ export default function MapComponent({ projects }: MapComponentProps) {
   // Message d'instructions pour les gestes
   const gestureMsg = isMobile 
     ? "Utilisez deux doigts pour déplacer la carte" 
-    : "Cliquez et utilisez Ctrl / ⌘ + molette pour zoomer sur la carte";
+    : "Utilisez Ctrl / ⌘ + molette pour zoomer sur la carte";
 
   return (
     <div className="map-container" style={{ position: "relative", height: "100vh", width: "100%" }}>
