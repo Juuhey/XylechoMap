@@ -10,10 +10,10 @@ export async function getWebflowProjects() {
       }
         
     const collections = await getWebflowCollections();
-    const collectionProjects = collections?.find((project) => project.displayName === "Projects");
-    const collectionMapProjects = collections?.find((project) => project.displayName === "Projects Maps");
+    const collectionProjects = collections?.find((project) => project.id === `${process.env.WEBFLOW_COLLECTION_PROJETS_ID}`);
+    const collectionMapProjects = collections?.find((project) => project.id === `${process.env.WEBFLOW_COLLECTION_PROJETSMAP_ID}`);
       
-    try {
+    try { 
         const projectsList = await myWebflowClient.collections.items.listItemsLive(
             `${collectionProjects?.id}`
       );
