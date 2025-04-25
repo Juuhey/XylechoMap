@@ -1,7 +1,6 @@
 import { myWebflowClient, siteId } from "./webflowClient";
 import { getWebflowCollections } from "./webflowCollections";
 import { Project } from "../models/Projects";
-import { WebflowProject } from "@/types/w_projects";
 
 export async function getWebflowProjects() {
   try {

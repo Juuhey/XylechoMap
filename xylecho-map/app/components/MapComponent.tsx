@@ -15,8 +15,6 @@ import "leaflet.markercluster";
 
 import { isMobile } from "react-device-detect";
 
-import { redirect } from "next/navigation";
-
 interface MapComponentProps {
   projects: Project[] | null;
 }
