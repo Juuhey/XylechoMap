@@ -13,7 +13,9 @@ import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster";
 
-import {isMobile} from "react-device-detect";
+import { isMobile } from "react-device-detect";
+
+import { redirect } from "next/navigation";
 
 interface MapComponentProps {
   projects: Project[] | null;
@@ -109,6 +111,8 @@ export default function MapComponent({ projects }: MapComponentProps) {
       });
 
       projects.forEach((project) => {
+        console.log(project.slug);
+
         const lat = parseFloat(project.latitude || "");
         const lng = parseFloat(project.longitude || "");
       
@@ -144,7 +148,9 @@ export default function MapComponent({ projects }: MapComponentProps) {
               ${project.ville}, ${project.year}
               <br>
               ${project.object}
-            `)
+              <br>
+              ${!project.mapOnly ? `<a href="https://xylecho.com/projects/${project.slug}" target="_blank">Voir le projet</a>` : ''}
+            `);
         }
       });
 

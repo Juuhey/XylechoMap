@@ -22,10 +22,11 @@ export async function getWebflowProjects() {
           `${collectionMapProjects?.id}`
         );
       
-        const projects: Project[] = [
-          ...(projectsList.items?.map((item: WebflowProject) => new Project(item)) || []),
-          ...(otherMapProjetcsList.items?.map((item: WebflowProject) => new Project(item)) || [])
-      ];
+        const projects = [
+          ...(projectsList.items?.map(item => ({ ...new Project(item), mapOnly: false })) || []),
+          ...(otherMapProjetcsList.items?.map(item => ({ ...new Project(item), mapOnly : true})) || [])
+        ];
+        
       
         return projects;
 

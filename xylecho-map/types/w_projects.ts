@@ -9,7 +9,9 @@ export interface WebflowProject {
         ville?: string;
         latitude?: string;
         longitude?: string;
+        slug?: string;
         [key: string]: any;
     };
+    mapOnly?: boolean;
   }
   
